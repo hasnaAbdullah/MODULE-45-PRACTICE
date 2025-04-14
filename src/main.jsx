@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 // import App from "./App.jsx";
 import "./App.css";
@@ -7,8 +7,15 @@ import Root from "./Root/Root";
 import Home from "./Home/Home";
 import Laptops from "./Laptops/Laptops";
 import Mobiles from "./Mobiles/Mobiles";
+import Users from "./Users/Users";
+import Foods from "./Foods/Foods";
+import FoodIngradients from "./FoodIngradients/FoodIngradients";
 import Laptop from "./Laptop/Laptop";
-import Mobile from "./Mobile/Mobile";
+import UserDetails from "./UserDetails/UserDetails";
+
+const foodCatsPromise = fetch(
+  "https://www.themealdb.com/api/json/v1/1/categories.php"
+).then((res) => res.json());
 
 const router = createBrowserRouter([
   {
@@ -25,7 +32,7 @@ const router = createBrowserRouter([
         Component: Laptops,
         children: [
           {
-            path: "laptop-details",
+            path: "laptop",
             Component: Laptop,
           },
         ],
@@ -33,12 +40,33 @@ const router = createBrowserRouter([
       {
         path: "mobiles",
         Component: Mobiles,
-        children: [
-          {
-            path: "mobile-details",
-            Component: Mobile,
-          },
-        ],
+      },
+      {
+        path: "users",
+        loader: () => fetch("https://jsonplaceholder.typicode.com/users"),
+        Component: Users,
+      },
+      {
+        path: "food-categories",
+        element: (
+          <Suspense fallback={<h2>Loading....</h2>}>
+            <Foods foodCatsPromise={foodCatsPromise} />
+          </Suspense>
+        ),
+      },
+      {
+        path: "main-ingradients",
+        Component: FoodIngradients,
+      },
+      {
+        path: "users/:userId",
+        loader: ({ params }) => {
+          console.log(params);
+          return fetch(
+            `https://jsonplaceholder.typicode.com/users/${params.userId}`
+          );
+        },
+        Component: UserDetails,
       },
     ],
   },

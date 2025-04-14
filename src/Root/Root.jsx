@@ -22,11 +22,29 @@ function Root() {
             Laptops
           </NavLink>
         </p>
+        <p>
+          <NavLink className="text-lg font-semibold" to={"/users"}>
+            Users
+          </NavLink>
+        </p>
+
+        <p>
+          <NavLink className="text-lg font-semibold" to={"/food-categories"}>
+            Foods
+          </NavLink>
+        </p>
+        <p>
+          <NavLink className="text-lg font-semibold" to={"/main-ingradients"}>
+            Food Ingradients
+          </NavLink>
+        </p>
       </nav>
       <h2>this is our root</h2>
       <Header />
 
-      <Outlet />
+      <div className="w-96 min-h-96 bg-sky-950 text-white py-10 px-2 mt-10">
+        <Outlet />
+      </div>
     </div>
   );
 }
